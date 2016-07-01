@@ -1,5 +1,6 @@
-from DashPykpi import example_foo
+from DashPykpi import kpistats
 
 def test_foo():
-    val = example_foo()
+    """Testing the tests work"""
+    val = kpistats.example_foo()
     assert val is None

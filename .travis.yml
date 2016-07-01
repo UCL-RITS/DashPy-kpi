@@ -12,8 +12,8 @@ install:
   - pip install .
 # command to run tests
 script:
-  #- py.test --cov DashPykpi --cov-report xml --cov-report term
+  - py.test --cov DashPykpi --cov-report xml --cov-report term
   - travis-sphinx build
 after_success:
-  #- codecov
+  - codecov
   - travis-sphinx deploy
