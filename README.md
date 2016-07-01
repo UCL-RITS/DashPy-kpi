@@ -4,6 +4,8 @@
 
 # DashPykpi
 
+Project documentation at [http://UCL-RITS.github.io/DashPykpi](http://UCL-RITS.github.io/DashPykpi).
+
 Main functions to produce KPI data for the UCL RSD Dashboard project.
 
 Takes Github Organizations or users as inputs.
