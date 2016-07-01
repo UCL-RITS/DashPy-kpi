@@ -1,4 +1,4 @@
-# DashPy-kpi
+# DashPykpi
 
 Main functions to produce KPI data for the UCL RSD Dashboard project.
 
