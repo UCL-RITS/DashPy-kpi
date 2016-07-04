@@ -25,9 +25,12 @@ class KPIGitResource(object):
             the output for each."""
 
     def count_commits(commits_url, _acc=0):
-        """Count commits to a repo object
+        """
+        Count commits to a repo object
         Adapted from https://gist.github.com/gdamjan/1241096
         and Stack Overflow Question 6862770
+        Input: commit URL
+        Output: integer
         """
         r = requests.get(commits_url)
         str_response = r.content.decode('utf-8')
