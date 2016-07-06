@@ -6,6 +6,7 @@ import getpass
 import json
 import requests
 
+
 class KPIGitResource(object):
     """A Github resource class. Input (one of the following):
        organization, username or repo
@@ -24,13 +25,33 @@ class KPIGitResource(object):
             If a username is given, then create a list of repos, and identify
             the output for each."""
 
+    def __init__(self, gh_string, query_type):
+        """:gh_string: a repo, username, or organization,
+        :query_type: a character to indicate the type of gh_string
+        either, 'r', 'u', or 'o'."""
+        username = input("Github username: ")  # e.g. rc-softdev-admin
+        getpss = getpass.getpass(prompt='Password for {0} '.format(username))
+        self.g = ghb(username, getpss)
+        self.gh_repo = None
+        self.gh_org = None
+        self.gh_user = None
+        if query_type is 'r':
+            self.gh_repo = gh_string
+        elif query_type is 'o':
+            self.gh_org = gh_string
+        elif query_type is 'u':
+            self.gh_user = gh_string
+        else:
+            raise ValueError("query_type must be char of 'r', 'o' or 'u'.")
+
     def count_commits(commits_url, _acc=0):
         """
         Count commits to a repo object
         Adapted from https://gist.github.com/gdamjan/1241096
         and Stack Overflow Question 6862770
-        Input: commit URL
-        Output: integer
+
+        :Input: commit URL (api.github.com/repos/<uname>/<repo>/commits)
+        :Output: integer
         """
         r = requests.get(commits_url)
         str_response = r.content.decode('utf-8')
