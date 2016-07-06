@@ -23,7 +23,12 @@ class KPIGitResource(object):
             If an organization is given then generate a list of usernames.
             For each username find a list of repos, and find the output.
             If a username is given, then create a list of repos, and identify
-            the output for each."""
+            the output for each.
+
+        NOTES: Eventually NEED TO FILTER THE REPO LIST before adding to db obj
+        (UNIQUE REPOS only to avoid double counting - SET() operator?)
+
+            """
 
     def __init__(self, gh_string, query_type):
         """:gh_string: a repo, username, or organization,
