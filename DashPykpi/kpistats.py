@@ -1,4 +1,4 @@
-import github3
+from github3 import login
 import pandas as pd
 import numpy as np
 import codecs
@@ -36,7 +36,7 @@ class KPIGitResource(object):
         either, 'r', 'u', or 'o'."""
         username = input("Github username: ")  # e.g. rc-softdev-admin
         getpss = getpass.getpass(prompt='Password for {0} '.format(username))
-        self.g = ghb(username, getpss)
+        self.gh = login(username, getpss)
         self.gh_repo = None
         self.gh_org = None
         self.gh_user = None
@@ -49,25 +49,30 @@ class KPIGitResource(object):
         else:
             raise ValueError("query_type must be char of 'r', 'o' or 'u'.")
 
-    def count_commits(commits_url, _acc=0):
-        """
-        Count commits to a repo object
-        Adapted from https://gist.github.com/gdamjan/1241096
-        and Stack Overflow Question 6862770
 
-        :Input: commit URL (api.github.com/repos/<uname>/<repo>/commits)
-        :Output: integer
-        """
-        r = requests.get(commits_url)
-        str_response = r.content.decode('utf-8')
-        commits = json.loads(str_response)
-        n = len(commits)
-        if n == 0:
-            return _acc
-        link = r.headers.get('link')
-        if link is None:
-            return _acc + n
-        next_url = find_next(r.headers['link'])
-        if next_url is None:
-            return _acc + n
-        return count_repo_commits(next_url, _acc + n)
+def get_repo_stats(repo):
+    """
+    Use the guihub3.py api to gather key statstics from each repo object.
+    Note, the repo is accessed via the iter_repos() method of github3.Login,
+    so the session is authenticated.
+    """
+    contribs = [(str(contrib.author), contrib.total)
+                for contrib in repo.iter_contributor_statistics()]
+    total = sum([user_num[1] for user_num in contribs])
+    d = {
+        'name': repo.name,
+        'stargazers': repo.stargazers,
+        'fork_count': repo.fork_count,
+        'commits_by_author': contribs,
+        'total_commits': total,
+        'repo_url': repo.clone_url,
+        }
+    return d
+
+
+def iterate_over_repos(self):
+    """Example to myself of how to iterate over repos collecting info..."""
+    for repo in self.gh.iter_repos(type='owner'):
+        tmp = self.get_repo_stats(repo)
+        print(tmp)
+    return
