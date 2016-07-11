@@ -1,3 +1,4 @@
+import os
 from github3 import login
 import pandas as pd
 import numpy as np
@@ -11,9 +12,17 @@ class KpiStats(object):
     """Gather key statstics from a repo url.
     """
     def __init__(self, url):
-        self.gh_name = input("Username to access github with:")
-        # nb. this login can be changed to use a github token
-        self.gh = login(self.gh_name, getpass.getpass(prompt='Ghub psswd of {0}:'.format(self.gh_name)))
+        if os.path.isfile('secret_key'):
+            fn = open("secret_key")
+            # Locally, with a secret_key file
+            self.gh = login(token=fn.read().split()[0])
+        elif os.environ.get('GHUB_API_TOKEN'):
+            # On Travis? (GHUB_API_TOKEN should be set...)
+            self.gh = login(token=os.environ['GHUB_API_TOKEN'])
+        else:
+            # Or just use username/password method
+            self.gh_name = input("Username to access github with:")
+            self.gh = login(self.gh_name, getpass.getpass(prompt='Ghub psswd of {0}:'.format(self.gh_name)))
         self.url = url
         self.repo = None
         self.stats = None

@@ -3,3 +3,4 @@
 .ipynb_checkpoints/
 .cache
 *.egg-info/
+secret_key
