@@ -17,6 +17,7 @@ class KpiStats(object):
             # Locally, with a secret_key file
             self.gh = login(token=fn.read().split()[0])
         elif os.environ.get('GHUB_API_TOKEN'):
+            print('Detected GHUB_API_TOKEN environment variable...')
             # On Travis? (GHUB_API_TOKEN should be set...)
             self.gh = login(token=os.environ['GHUB_API_TOKEN'])
         else:
