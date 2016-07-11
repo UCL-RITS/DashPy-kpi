@@ -4,3 +4,5 @@
 .cache
 *.egg-info/
 secret_key
+.coverage
+coverage.xml
