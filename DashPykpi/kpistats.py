@@ -7,14 +7,13 @@ import json
 import requests
 
 
-class KpiStats_dev(object):
+class KpiStats(object):
     """Gather key statstics from a repo url.
     """
     def __init__(self, url):
-        gh_name = input("Username to access github with:")
-        self.gh_name
+        self.gh_name = input("Username to access github with:")
         # nb. this login can be changed to use a github token
-        self.gh = login(gh_name, getpass.getpass(prompt='Ghub psswd of {0}:'.format(gh_name)))
+        self.gh = login(self.gh_name, getpass.getpass(prompt='Ghub psswd of {0}:'.format(self.gh_name)))
         self.url = url
         self.repo = None
         self.stats = None
@@ -24,9 +23,9 @@ class KpiStats_dev(object):
 
     def get_repo_object_from_url(self):
         demo = 'https://github.com/<user>/<repo>'
-        assert type(url) == str, "Error: url should be a string in format of " + demo
-        assert url.split('/')[-3] == 'github.com', "Error: {0} isn't valid ".format(url)
-        user_str, repo_str = url.split('/')[-2:]
+        assert type(self.url) == str, "Error: url should be a string in format of " + demo
+        assert self.url.split('/')[-3] == 'github.com', "Error: {0} isn't valid ".format(self.url)
+        user_str, repo_str = self.url.split('/')[-2:]
         self.repo = self.gh.repository(user_str, repo_str)
         return
 
@@ -34,6 +33,7 @@ class KpiStats_dev(object):
         contribs = [(str(contrib.author), contrib.total)
                     for contrib in self.repo.iter_contributor_statistics()]
         total = sum([user_num[1] for user_num in contribs])
+        branch_count = len([branch for branch in self.repo.iter_branches()])
         self.stats = {
             'name': self.repo.name,
             'stargazers': self.repo.stargazers,
@@ -41,6 +41,7 @@ class KpiStats_dev(object):
             'commits_by_author': contribs,
             'total_commits': total,
             'repo_url': self.repo.clone_url,
+            'branches': branch_count,
             }
         return
 
