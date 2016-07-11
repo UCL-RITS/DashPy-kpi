@@ -9,16 +9,14 @@ import requests
 
 
 class KpiStats(object):
-    """Gather key statstics from a repo url.
-    """
+    """Gather key statstics from a repo url."""
     def __init__(self, url):
         if os.path.isfile('secret_key'):
             fn = open("secret_key")
             # Locally, with a secret_key file
             self.gh = login(token=fn.read().split()[0])
         elif os.environ.get('GHUB_API_TOKEN'):
-            print('Detected GHUB_API_TOKEN environment variable...')
-            # On Travis? (GHUB_API_TOKEN should be set...)
+            # On Travis? (GHUB_API_TOKEN could be set...)
             self.gh = login(token=os.environ['GHUB_API_TOKEN'])
         else:
             # Or just use username/password method
@@ -60,3 +58,4 @@ class KpiStats(object):
         self.get_repo_stats()
         for k in sorted(self.stats):
             print(k, '-->', self.stats[k])
+        # method to add stats data to a DB format here!

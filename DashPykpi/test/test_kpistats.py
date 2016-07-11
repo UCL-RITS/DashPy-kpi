@@ -14,8 +14,3 @@ def test_private_repo_access():
     test = KpiStats(url)
     test.work()
     assert test.stats['total_commits'] > 1000
-
-
-def test_environment_variable():
-    print(os.environ['TEST_VAR'])
-    assert os.environ['TEST_VAR'] == 'TEST_192837'
