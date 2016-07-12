@@ -75,10 +75,15 @@ class KpiStats(object):
                 pass
         return
 
-    def work(self, verbose=False):
+    def work(self, verbose=False, add_to_db=True):
         self.get_repo_object_from_url()
         self.get_repo_stats()
+        # Try to deal with the timeout bug here -> retrying if no commits found
+        timeout_bug = self.stats['total_commits'] < 1
+        if timeout_bug:
+            self.get_repo_stats()
+        if add_to_db:
+            self.add_db_row()
         if verbose:
             for k in sorted(self.stats):
                 print(k, '-->', self.stats[k])
-        self.add_db_row()

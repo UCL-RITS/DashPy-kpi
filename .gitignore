@@ -6,3 +6,4 @@
 secret_key
 .coverage
 coverage.xml
+*.json
