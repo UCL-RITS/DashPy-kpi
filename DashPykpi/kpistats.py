@@ -10,8 +10,10 @@ from tinydb import TinyDB, Query
 
 
 class KpiStats(object):
-    """Gather key statstics from a repo url."""
-    def __init__(self, url):
+    """Gather key statstics from a list of repo urls.
+    e.g. urls=['url1',...]
+    """
+    def __init__(self, urls):
         if os.path.isfile('secret_key'):
             fn = open("secret_key")
             # Locally, with a secret_key file
@@ -24,7 +26,7 @@ class KpiStats(object):
             self.gh_name = input("Username to access github with:")
             pss = getpass.getpass(prompt='Ghub pswd {0}:'.format(self.gh_name))
             self.gh = login(self.gh_name, pss)
-        self.url = url
+        self.urls = urls  # A list of URL strings
         self.repo = None
         self.stats = None
         self.db = TinyDB('tinydb_for_KPI.json')  # create new or open existing
@@ -32,13 +34,13 @@ class KpiStats(object):
     def __str__(self):
         print("KPI stats back-end")
 
-    def get_repo_object_from_url(self):
+    def get_repo_object_from_url(self, url):
         demo = 'https://github.com/<user>/<repo>'
         er1 = "Error: url should be a string in format of "
-        er2 = "Error: {0} isn't valid ".format(self.url)
-        assert type(self.url) == str, er1 + demo
-        assert self.url.split('/')[-3] == 'github.com', er2
-        user_str, repo_str = self.url.split('/')[-2:]
+        er2 = "Error: {0} isn't valid ".format(url)
+        assert type(url) == str, er1 + demo
+        assert url.split('/')[-3] == 'github.com', er2
+        user_str, repo_str = url.split('/')[-2:]
         self.repo = self.gh.repository(user_str, repo_str)
         return
 
@@ -59,6 +61,12 @@ class KpiStats(object):
         return
 
     def add_db_row(self):
+        """Mostly this checks if there is an entry already present,
+        if there isnt it adds a row. If there is one already, it checks
+        to see if the newly retrieved dictionary has updated info. If
+        so, it removes the old row, and adds in the new one. If there
+        is an error, and there is more than one row per repo it throws
+        an assert error."""
         DBfield = Query()
         results = self.db.search(DBfield.repo_name == self.repo.name)
         assert len(results) < 2, "Error, repeat entries in DB for same repo."
@@ -75,15 +83,23 @@ class KpiStats(object):
                 pass
         return
 
+    def clean_state(self):
+        """Clean the temporary data out of the class before attempting to get
+        a new repo object"""
+        self.repo = None
+        self.stats = None
+
     def work(self, verbose=False, add_to_db=True):
-        self.get_repo_object_from_url()
-        self.get_repo_stats()
-        # Try to deal with the timeout bug here -> retrying if no commits found
-        timeout_bug = self.stats['total_commits'] < 1
-        if timeout_bug:
+        for url in self.urls:
+            self.get_repo_object_from_url(url=url)
             self.get_repo_stats()
-        if add_to_db:
-            self.add_db_row()
-        if verbose:
-            for k in sorted(self.stats):
-                print(k, '-->', self.stats[k])
+            # Deal with the timeout bug here -> retrying if no commits found
+            timeout_bug = self.stats['total_commits'] < 1
+            if timeout_bug:
+                self.get_repo_stats()
+            if add_to_db:
+                self.add_db_row()
+            if verbose:
+                for k in sorted(self.stats):
+                    print(k, '-->', self.stats[k])
+            self.clean_state()

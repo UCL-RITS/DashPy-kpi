@@ -3,14 +3,35 @@ import os
 
 
 def test_public_repo_access():
-    url = "https://github.com/benlaken/Comment_BadruddinAslam2014"  # 21commits
-    test = KpiStats(url)
+    if os.path.isfile('tinydb_for_KPI.json'):
+        os.remove('tinydb_for_KPI.json')
+    urls = ["https://github.com/benlaken/Comment_BadruddinAslam2014"]
+    test = KpiStats(urls=urls)
     test.work()
-    assert test.stats['total_commits'] > 20
+    tmp = test.db.all()  # get the results from the DB object
+    em1 = "Error, insufficent commits in public repo"
+    assert tmp[0]['total_commits'] > 20, em1
 
 
 def test_private_repo_access():
-    url = "https://github.com/UCL-RITS/RSD-Dashboard"  # >1k commits + PRIVATE
-    test = KpiStats(url)
+    if os.path.isfile('tinydb_for_KPI.json'):
+        os.remove('tinydb_for_KPI.json')
+    urls = ["https://github.com/UCL-RITS/RSD-Dashboard"]
+    test = KpiStats(urls=urls)
     test.work()
-    assert test.stats['total_commits'] > 1000
+    tmp = test.db.all()  # get the results from the DB object
+    em1 = "Error, insufficent commits in privte repo"
+    assert tmp[0]['total_commits'] > 1000, em1
+
+
+def test_adds_rows_to_db():
+    """Test the database file is created and populated appropriatley."""
+    if os.path.isfile('tinydb_for_KPI.json'):
+        os.remove('tinydb_for_KPI.json')
+    urls = ["https://github.com/UCL-RITS/RSD-Dashboard",
+            "https://github.com/benlaken/Comment_BadruddinAslam2014",
+            "https://github.com/benlaken/fispy"]
+    test = KpiStats(urls=urls)
+    test.work()
+    db_rows = test.db.all()
+    assert len(db_rows) == 3, "Error, incorrect number of rows in DB"
