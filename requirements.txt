@@ -32,3 +32,4 @@ tornado==4.3
 traitlets==4.2.1
 sphinx
 travis-sphinx
+tinydb

@@ -6,6 +6,7 @@ import codecs
 import getpass
 import json
 import requests
+from tinydb import TinyDB, Query
 
 
 class KpiStats(object):
@@ -21,18 +22,22 @@ class KpiStats(object):
         else:
             # Or just use username/password method
             self.gh_name = input("Username to access github with:")
-            self.gh = login(self.gh_name, getpass.getpass(prompt='Ghub psswd of {0}:'.format(self.gh_name)))
+            pss = getpass.getpass(prompt='Ghub pswd {0}:'.format(self.gh_name))
+            self.gh = login(self.gh_name, pss)
         self.url = url
         self.repo = None
         self.stats = None
+        self.db = TinyDB('tinydb_for_KPI.json')  # create new or open existing
 
     def __str__(self):
         print("KPI stats back-end")
 
     def get_repo_object_from_url(self):
         demo = 'https://github.com/<user>/<repo>'
-        assert type(self.url) == str, "Error: url should be a string in format of " + demo
-        assert self.url.split('/')[-3] == 'github.com', "Error: {0} isn't valid ".format(self.url)
+        er1 = "Error: url should be a string in format of "
+        er2 = "Error: {0} isn't valid ".format(self.url)
+        assert type(self.url) == str, er1 + demo
+        assert self.url.split('/')[-3] == 'github.com', er2
         user_str, repo_str = self.url.split('/')[-2:]
         self.repo = self.gh.repository(user_str, repo_str)
         return
@@ -43,19 +48,37 @@ class KpiStats(object):
         total = sum([user_num[1] for user_num in contribs])
         branch_count = len([branch for branch in self.repo.iter_branches()])
         self.stats = {
-            'name': self.repo.name,
             'stargazers': self.repo.stargazers,
             'fork_count': self.repo.fork_count,
             'commits_by_author': contribs,
             'total_commits': total,
-            'repo_url': self.repo.clone_url,
+            'repo_owner': self.repo.owner.login,
+            'repo_name': self.repo.name,
             'branches': branch_count,
             }
         return
 
-    def work(self):
+    def add_db_row(self):
+        DBfield = Query()
+        results = self.db.search(DBfield.repo_name == self.repo.name)
+        assert len(results) < 2, "Error, repeat entries in DB for same repo."
+        if len(results) == 0:  # if no record then add the results
+            self.db.insert(self.stats)
+        if len(results) == 1:  # if record exists, but the user has rerun code
+            eid = results[0].eid
+            if results[0]['total_commits'] < self.stats['total_commits']:
+                self.db.remove(eids=[eid])  # remove the old entry
+                self.db.insert(self.stats)  # add the new entry
+            else:
+                # condition where an entry exists in DB,
+                # and new stats are no diffrent (no repo changes)
+                pass
+        return
+
+    def work(self, verbose=False):
         self.get_repo_object_from_url()
         self.get_repo_stats()
-        for k in sorted(self.stats):
-            print(k, '-->', self.stats[k])
-        # method to add stats data to a DB format here!
+        if verbose:
+            for k in sorted(self.stats):
+                print(k, '-->', self.stats[k])
+        self.add_db_row()
