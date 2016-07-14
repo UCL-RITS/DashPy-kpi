@@ -57,6 +57,7 @@ class KpiStats(object):
             'repo_owner': self.repo.owner.login,
             'repo_name': self.repo.name,
             'branches': branch_count,
+            'language': self.repo.language,
             }
         return
 
