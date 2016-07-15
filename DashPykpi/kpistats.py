@@ -10,7 +10,7 @@ from tinydb import TinyDB, Query
 
 
 class KpiStats(object):
-    """This class uses github3.py to gather key statistics from specified repos.
+    """This class uses github3.py to gather key statistics from specified repos
 
     Ensure the class can log in to an authorized github account (if not only
     public repo stats can be retrieved). Two methods can be used to log in.
