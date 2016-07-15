@@ -10,8 +10,26 @@ from tinydb import TinyDB, Query
 
 
 class KpiStats(object):
-    """Gather key statstics from a list of repo urls.
-    e.g. urls=['url1',...]
+    """This class uses github3.py to gather key statistics from specified repos.
+
+    Ensure the class can log in to an authorized github account (if not only
+    public repo stats can be retrieved). Two methods can be used to log in.
+    Firstly using a github api token: The program will look for this in a file
+    called 'secret_key' in the local folder. If this is not found the software
+    will default to asking for a username and password. The class should be
+    instansiated with a list of github repo url strings.
+
+    - **paramaters**, **types** and **return**::
+
+        :param urls: Github repo urls
+        :type urls: List
+        :return: KpiStats object
+
+    :Example:
+
+    rsts = KpiStats(['https://github.com/<user1>/<repox>',
+                     'https://github.com/<user2>/<repoy>'])
+    rsts.work()
     """
     def __init__(self, urls):
         if os.path.isfile('secret_key'):
@@ -35,6 +53,15 @@ class KpiStats(object):
         print("KPI stats back-end")
 
     def get_repo_object_from_url(self, url):
+        """
+        function:: get_repo_object_from_url(self, url)
+
+        Retrieves a github3.py.Repository() object from a url string in an
+        authenticated session.
+
+        :param url: url string in format 'https://github.com/<user>/<repo>'
+        :rtype: Authenticated github3.py.Repository() object as self.repo()
+        """
         demo = 'https://github.com/<user>/<repo>'
         er1 = "Error: url should be a string in format of "
         er2 = "Error: {0} isn't valid ".format(url)
@@ -45,6 +72,14 @@ class KpiStats(object):
         return
 
     def get_repo_stats(self):
+        """
+        function:: KpiStats.get_repo_stats(self)
+
+        Uses self.repo() to identify key statistics from a repository.
+
+        :param: self
+        :rtype: A dictionary object as self.stats
+        """
         contribs = [(str(contrib.author), contrib.total)
                     for contrib in self.repo.iter_contributor_statistics()]
         total = sum([user_num[1] for user_num in contribs])
@@ -62,12 +97,18 @@ class KpiStats(object):
         return
 
     def add_db_row(self):
-        """Mostly this checks if there is an entry already present,
-        if there isnt it adds a row. If there is one already, it checks
-        to see if the newly retrieved dictionary has updated info. If
-        so, it removes the old row, and adds in the new one. If there
-        is an error, and there is more than one row per repo it throws
-        an assert error."""
+        """
+        function:: KpiStats.add_db_row(self)
+
+        Checks if there is a database and entry already present, if there isn't
+        it adds a row to a database. If there is one already, it checks to see
+        if the newly retrieved dictionary has updated info. If so, it removes
+        the old row, and adds in the new one. If there is an error, and there
+        is more than one row per repo it throws an assert error.
+
+        :param: self
+        :rtype: updates database connected to self.db
+        """
         DBfield = Query()
         results = self.db.search(DBfield.repo_name == self.repo.name)
         assert len(results) < 2, "Error, repeat entries in DB for same repo."
@@ -85,8 +126,16 @@ class KpiStats(object):
         return
 
     def clean_state(self):
-        """Clean the temporary data out of the class before attempting to get
-        a new repo object"""
+        """
+        function:: KpiStats.clean_state(self)
+
+        Clean temporary data in the class before attempting to get a new repo
+        object, specfically setting self.repo and self.stats to None.
+
+        :param: self
+        :rtype self.repo: None
+        :rtype self.stats: None
+        """
         self.repo = None
         self.stats = None
 
