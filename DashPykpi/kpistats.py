@@ -153,3 +153,33 @@ class KpiStats(object):
                 for k in sorted(self.stats):
                     print(k, '-->', self.stats[k])
             self.clean_state()
+
+
+class GraphKPIs(object):
+    """Graph key statistics from specified repos.
+
+    More info here...
+
+    - **paramaters**, **types** and **return**::
+
+    """
+    def __init__(self):
+        self.df = None
+        if os.path.exists('tinydb_for_KPI.json'):
+            self.db = TinyDB('tinydb_for_KPI.json')
+        else:
+            raise IOError('DB file not present')
+
+    def __str__(self):
+        print("Class for graphing the output of KPIStats held in a DB.")
+
+    def gen_df_from_db(self):
+        """
+        function:: gen_df_from_db(self, url)
+
+        Converts the DB into a Pandas Dataframe object.
+
+        :param: self.db
+        :rtype: self.df
+        """
+        pass
