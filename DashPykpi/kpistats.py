@@ -164,22 +164,12 @@ class GraphKPIs(object):
 
     """
     def __init__(self):
-        self.df = None
+
         if os.path.exists('tinydb_for_KPI.json'):
             self.db = TinyDB('tinydb_for_KPI.json')
+            self.df = pd.Dataframe(self.db.all())
         else:
             raise IOError('DB file not present')
 
     def __str__(self):
         print("Class for graphing the output of KPIStats held in a DB.")
-
-    def gen_df_from_db(self):
-        """
-        function:: gen_df_from_db(self, url)
-
-        Converts the DB into a Pandas Dataframe type object.
-
-        :param: self.db
-        :rtype: self.df
-        """
-        pass
