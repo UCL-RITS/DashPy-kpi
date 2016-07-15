@@ -177,7 +177,7 @@ class GraphKPIs(object):
         """
         function:: gen_df_from_db(self, url)
 
-        Converts the DB into a Pandas Dataframe object.
+        Converts the DB into a Pandas Dataframe type object.
 
         :param: self.db
         :rtype: self.df
