@@ -8,7 +8,9 @@ import getpass
 import json
 import requests
 from tinydb import TinyDB, Query
-
+from bokeh.models import HoverTool, ColumnDataSource
+from bokeh.plotting import figure
+from bokeh.embed import components
 
 class KpiStats(object):
     """This class uses github3.py to gather key statistics from specified repos
