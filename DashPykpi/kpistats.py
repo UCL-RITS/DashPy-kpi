@@ -144,8 +144,8 @@ class KpiStats(object):
     def work(self, status=False, debug=False, verbose=False, add_to_db=True):
         for i, url in enumerate(self.urls):
             if status:
-                print("\rComplete...{0}%".format(i/len(self.urls)),
-                      end="")
+                print("\rComplete...{0:2.0f}%".format(((i+1)/len(self.urls)
+                                                       )*100.,), end="")
             self.get_repo_object_from_url(url=url)
             self.get_repo_stats(debug=debug)
             # Deal with html get timeout bug here -> retry if no commits found

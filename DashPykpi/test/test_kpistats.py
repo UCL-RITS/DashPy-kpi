@@ -40,4 +40,4 @@ def test_adds_rows_to_db():
 def test_GitURLs_populates():
     """Test that the GitURLs class, meant for development, retrieves data."""
     url_list = GitURLs()
-    assert len(url_list.urls) > 0, "Error, GitURLs() class not retrieving urls."
+    assert len(url_list.urls) > 0, "Error, GitURLs() class not retrieving urls"
