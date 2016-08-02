@@ -155,6 +155,36 @@ class KpiStats(object):
             self.clean_state()
 
 
+class git_urls(object):
+    """Get all repo urls associated with a github account.
+
+    Return a list of url strings as self.urls, useful during testing. In
+    deployment this list will likely come directly from the Dashboard database.
+
+    :Example:
+
+    url_list = git_urls()
+    url_list.urls[0:3]
+    >['https://github.com/benlaken/Comment_BadruddinAslam2014.git',
+      'https://github.com/benlaken/Composite_methods_LC13.git',
+      'https://github.com/benlaken/ECCO.git']
+    """
+    def __init__(self):
+        if os.path.isfile('secret_key'):
+            fn = open("secret_key")
+            # Locally, with a secret_key file
+            self.gh = login(token=fn.read().split()[0])
+        elif os.environ.get('GHUB_API_TOKEN'):
+            # On Travis? (GHUB_API_TOKEN can be set...)
+            self.gh = login(token=os.environ['GHUB_API_TOKEN'])
+        else:
+            # Or just use username/password method
+            self.gh_name = input("Username to access github with:")
+            pss = getpass.getpass(prompt='Ghub pswd {0}:'.format(self.gh_name))
+            self.gh = login(self.gh_name, pss)
+        self.urls = [r.clone_url for r in self.gh.iter_repos()]
+
+
 class GraphKPIs(object):
     """Graph key statistics from specified repos.
 
