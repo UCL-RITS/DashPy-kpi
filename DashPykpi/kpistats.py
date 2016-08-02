@@ -71,7 +71,7 @@ class KpiStats(object):
         self.repo = self.gh.repository(user_str, repo_str)
         return
 
-    def get_repo_stats(self):
+    def get_repo_stats(self, debug=False):
         """
         function:: KpiStats.get_repo_stats(self)
 
@@ -80,6 +80,8 @@ class KpiStats(object):
         :param: self
         :rtype: A dictionary object as self.stats
         """
+        if debug:
+            print('\nExamining stats of {0}'.format(self.repo))
         contribs = [(str(contrib.author), contrib.total)
                     for contrib in self.repo.iter_contributor_statistics()]
         total = sum([user_num[1] for user_num in contribs])
@@ -139,11 +141,14 @@ class KpiStats(object):
         self.repo = None
         self.stats = None
 
-    def work(self, verbose=False, add_to_db=True):
-        for url in self.urls:
+    def work(self, status=False, debug=False, verbose=False, add_to_db=True):
+        for i, url in enumerate(self.urls):
+            if status:
+                print("\rComplete...{0}%".format(i/len(self.urls)),
+                      end="")
             self.get_repo_object_from_url(url=url)
-            self.get_repo_stats()
-            # Deal with the timeout bug here -> retrying if no commits found
+            self.get_repo_stats(debug=debug)
+            # Deal with html get timeout bug here -> retry if no commits found
             timeout_bug = self.stats['total_commits'] < 1
             if timeout_bug:
                 self.get_repo_stats()
@@ -155,7 +160,7 @@ class KpiStats(object):
             self.clean_state()
 
 
-class git_urls(object):
+class GitURLs(object):
     """Get all repo urls associated with a github account.
 
     Return a list of url strings as self.urls, useful during testing. In
@@ -182,7 +187,8 @@ class git_urls(object):
             self.gh_name = input("Username to access github with:")
             pss = getpass.getpass(prompt='Ghub pswd {0}:'.format(self.gh_name))
             self.gh = login(self.gh_name, pss)
-        self.urls = [r.clone_url for r in self.gh.iter_repos()]
+        self.urls = [r.clone_url.split('.git')[0]
+                     for r in self.gh.iter_repos()]
 
 
 class GraphKPIs(object):
