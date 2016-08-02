@@ -91,6 +91,7 @@ class KpiStats(object):
             'stargazers': self.repo.stargazers,
             'fork_count': self.repo.fork_count,
             'commits_by_author': contribs,
+            'num_contributors': len(contribs),
             'total_commits': total,
             'repo_owner': self.repo.owner.login,
             'repo_name': self.repo.name,
@@ -205,7 +206,11 @@ class GitURLs(object):
 class GraphKPIs(object):
     """Graph key statistics from specified repos.
 
-    More info here...
+    How to embed bokeh plots into Django: example at
+    http://bokeh.pydata.org/en/latest/docs/user_guide/embed.html
+    Essentially, insert the script and div returned into an html template and
+    the div will be replaced by the plot objet. This assumes BokehJS has been
+    loaded, either inline or via CDN. (See the link above to copy CDN lines.)
 
     - **paramaters**, **types** and **return**::
 
