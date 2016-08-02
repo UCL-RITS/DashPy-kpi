@@ -1,3 +1,4 @@
+from __future__ import print_function
 from DashPykpi.kpistats import KpiStats, GitURLs
 import os
 

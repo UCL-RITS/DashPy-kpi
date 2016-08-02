@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 from github3 import login
 import pandas as pd
@@ -142,6 +143,16 @@ class KpiStats(object):
         self.stats = None
 
     def work(self, status=False, debug=False, verbose=False, add_to_db=True):
+        """
+        function:: KpiStats.work(self, status=False, debug=False,
+        verbose=False, add_to_db=True)
+
+        Main routine that handels passing single url strings to a function to
+        get the repo object, and then examine statistics for each repo. It then
+        writes that data to a TinyDB file. Optionally, reporting on the stats,
+        progress, and execution of the called functions can be provided by
+        setting the status, debug and verbose flags.
+        """
         for i, url in enumerate(self.urls):
             if status:
                 print("\rComplete...{0:2.0f}%".format(((i+1)/len(self.urls)
