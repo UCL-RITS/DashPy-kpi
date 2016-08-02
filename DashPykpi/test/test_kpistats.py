@@ -1,4 +1,4 @@
-from DashPykpi.kpistats import KpiStats
+from DashPykpi.kpistats import KpiStats, GitURLs
 import os
 
 
@@ -35,3 +35,9 @@ def test_adds_rows_to_db():
     test.work()
     db_rows = test.db.all()
     assert len(db_rows) == 3, "Error, incorrect number of rows in DB"
+
+
+def test_GitURLs_populates():
+    """Test that the GitURLs class, meant for development, retrieves data."""
+    url_list = GitURLs()
+    assert len(url_list) > 0, "Error, GitURLs() class not retrieving urls."
