@@ -225,3 +225,56 @@ class GraphKPIs(object):
 
     def __str__(self):
         print("Class for graphing the output of KPIStats held in a DB.")
+
+    def xy_scatter(self, x, y, ptitle="My plot", give_script_div=False):
+        """
+        example of use: xy_scatter(df=, x='stargazers', y='fork_count')
+        """
+        df = self.df
+        colormap = {
+            "low": "#8400FF",
+            "mid": "#FF00FF",
+            "high": "#FF0088",
+            "highest": "#FF0000",
+                    }
+        # colour points by commit numbers
+        colour_list = []
+        for comitnum in df.total_commits:
+            if comitnum < 10:
+                colour_list.append(colormap['low'])
+            elif comitnum >= 10 and comitnum < 100:
+                colour_list.append(colormap['mid'])
+            elif comitnum >= 100 and comitnum < 1000:
+                colour_list.append(colormap['high'])
+            else:
+                colour_list.append(colormap['highest'])
+        source = ColumnDataSource(
+            data=dict(
+                fork_count=df.fork_count,
+                repo_name=df.repo_name,
+                repo_owner=df.repo_owner,
+                stargazers=df.stargazers,
+                num_contributors=df.num_contributors,
+                total_commits=df.total_commits,
+                color_by_commits=colour_list,
+            )
+        )
+        hover = HoverTool(
+                tooltips=[
+                    ("Repo", "@repo_name"),
+                    ("Owner", "@repo_owner"),
+                    ("Stargazers", "@stargazers"),
+                    ("Total commits", "@total_commits"),
+                    ("Fork count", "@fork_count"),
+                    ("Num. contributors", "@num_contributors"),
+                ]
+            )
+        tools = "pan, resize, wheel_zoom, reset"
+        p = figure(title=ptitle, tools=[tools, hover])
+        p.xaxis.axis_label = x
+        p.yaxis.axis_label = y
+        p.circle(x, y, source=source, color="color_by_commits")
+        show(p)
+        if give_script_div:
+            script, div = components(p)
+            return script, div
