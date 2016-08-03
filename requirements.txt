@@ -1,5 +1,6 @@
 appnope==0.1.0
 backports.shutil-get-terminal-size==1.0.0
+bokeh==0.12.1
 decorator==4.0.9
 github3.py
 ipykernel==4.3.1
