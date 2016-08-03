@@ -57,7 +57,7 @@ def test_script_div_created():
 
 
 def test_xyplot_autotile():
-    """Check the auto-titles of plots are correct""""
+    """Check the auto-titles of plots are correct"""
     grobj = GraphKPIs()
     p = grobj.xy_scatter(x='stargazers', y='fork_count')
     assert p.title.text == 'Stargazers Vs. Fork Count'
