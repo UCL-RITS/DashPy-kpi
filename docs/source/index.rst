@@ -5,13 +5,14 @@
 
 Welcome to DashPyKPI's documentation!
 =====================================
+.. include :: intro.rst
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
-
+   modules
 
 Indices and tables
 ==================
@@ -19,4 +20,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

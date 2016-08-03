@@ -13,13 +13,15 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+# imports
+import os
+import sys
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../DashPykpi'))
 
 # -- General configuration ------------------------------------------------
 
@@ -32,6 +34,11 @@
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.coverage',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.ifconfig',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.githubpages',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -52,8 +59,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'DashPyKPI'
-copyright = '2016, B.Laken'
-author = 'B.Laken'
+copyright = '2016, Benjamin A. Laken'
+author = 'Benjamin A. Laken'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
