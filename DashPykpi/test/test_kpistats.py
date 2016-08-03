@@ -1,5 +1,5 @@
 from __future__ import print_function
-from DashPykpi.kpistats import KpiStats, GitURLs
+from DashPykpi.kpistats import KpiStats, GitURLs, GraphKPIs
 import os
 
 
@@ -42,3 +42,24 @@ def test_GitURLs_populates():
     """Test that the GitURLs class, meant for development, retrieves data."""
     url_list = GitURLs()
     assert len(url_list.urls) > 0, "Error, GitURLs() class not retrieving urls"
+
+
+def test_script_div_created():
+    """Check valid div and JS string objects are returned from bokeh"""
+    grobj = GraphKPIs()
+    script, div = grobj.xy_scatter(x='stargazers', y='fork_count',
+                                   give_script_div=True)
+    assert type(div) == str, "Error div variable not STR type"
+    assert type(script) == str, "Error script variable not STR type"
+    assert '</div>' in div.split(), "Error, no </div> string in div variable"
+    assert 'type="text/javascript">' in script.split(), "Invalid JS in script"
+    assert 'Bokeh.$(function()' in script.split(), "Bokeh.func not in script"
+
+
+def test_xyplot_autotile():
+    """Check the auto-titles of plots are correct""""
+    grobj = GraphKPIs()
+    p = grobj.xy_scatter(x='stargazers', y='fork_count')
+    assert p.title.text == 'Stargazers Vs. Fork Count'
+    p2 = grobj.xy_scatter(x='num_contributors', y='total_commits')
+    assert p2.title.text == 'Num Contributors Vs. Total Commits'
