@@ -1,6 +1,7 @@
 from __future__ import print_function
 from DashPykpi.kpistats import KpiStats, GitURLs, GraphKPIs
 import os
+import sys
 
 
 def test_public_repo_access():
@@ -49,8 +50,12 @@ def test_script_div_created():
     grobj = GraphKPIs()
     script, div = grobj.xy_scatter(x='stargazers', y='fork_count',
                                    give_script_div=True)
-    assert type(div) == str, "Error div variable not STR type"
-    assert type(script) == str, "Error script variable not STR type"
+    if sys.version_info > (3, 0):
+        assert isinstance(div, str)
+        assert isinstance(script, str)
+    if sys.version_info < (2, 8):
+        assert isinstance(div, basestring)
+        assert isinstance(script, basestring)    
     assert '</div>' in div.split(), "Error, no </div> string in div variable"
     assert 'type="text/javascript">' in script.split(), "Invalid JS in script"
     assert 'Bokeh.$(function()' in script.split(), "Bokeh.func not in script"
