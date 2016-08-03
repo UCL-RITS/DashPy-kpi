@@ -28,12 +28,6 @@ class KpiStats(object):
         :param urls: Github repo urls
         :type urls: List
         :return: KpiStats object
-
-    :Example:
-
-    rsts = KpiStats(['https://github.com/<user1>/<repox>',
-                     'https://github.com/<user2>/<repoy>'])
-    rsts.work()
     """
     def __init__(self, urls):
         if os.path.isfile('secret_key'):
@@ -185,9 +179,9 @@ class GitURLs(object):
 
     url_list = git_urls()
     url_list.urls[0:3]
-    >['https://github.com/benlaken/Comment_BadruddinAslam2014.git',
-      'https://github.com/benlaken/Composite_methods_LC13.git',
-      'https://github.com/benlaken/ECCO.git']
+    ['https://github.com/benlaken/Comment_BadruddinAslam2014.git',
+    'https://github.com/benlaken/Composite_methods_LC13.git',
+    'https://github.com/benlaken/ECCO.git']
     """
     def __init__(self):
         if os.path.isfile('secret_key'):
@@ -214,9 +208,6 @@ class GraphKPIs(object):
     Essentially, insert the script and div returned into an html template and
     the div will be replaced by the plot objet. This assumes BokehJS has been
     loaded, either inline or via CDN. (See the link above to copy CDN lines.)
-
-    - **paramaters**, **types** and **return**::
-
     """
     def __init__(self):
 
@@ -234,10 +225,11 @@ class GraphKPIs(object):
 
         Automatically generate a title from two strings. The strings
         can include underscores (as they are column names from a DB), these
-        are removed.
+        are removed. Possible values for x and y are 'fork_count', 'stargazers'
+        , 'num_contributors' or 'total_commits'.
 
-        :param x,y: string e.g. 'fork_count', 'stargazers', 'num_contributors'
-        'total_commits'
+        :param x: string
+        :param y: string
         :return: string Title for plots
         """
         x = x.split('_')
@@ -246,29 +238,12 @@ class GraphKPIs(object):
 
     def xy_scatter(self, x, y, ptitle=None, give_script_div=False):
         """ Create an x y scatterplot using Bokeh to insert into a webpage or
-        a Jupyter notebook.
+        a Jupyter notebook. Valid x y inputs are 'fork_count', 'stargazers',
+        'num_contributors' or 'total_commits'.
 
-        :param x,y: string 'fork_count', 'stargazers', 'num_contributors'
-        'total_commits'
+        :param x: string
+        :param y: string
         :return: Bokeh object or script and div
-
-        :Example:
-        Assuming a tinydb_for_KPI.json file exists):
-
-        1. Creating html for Django:
-        grobj = GraphKPIs()
-        script, div = grobj.xy_scatter(df=, x='stargazers', y='total_commits',
-        give_script_div=True)
-
-        Then include the script and the div within the Django html template.
-
-        2. Returning a bokeh plot object which can be displayed in a notebook.
-
-        from bokeh.plotting import figure, show, output_notebook
-        output_notebook()
-        grobj = GraphKPIs()
-        p = grobj.xy_scatter(x='stargazers', y='total_commits')
-        show(p)
         """
         if not ptitle:
             ptitle = self.auto_title(x=x, y=y)
