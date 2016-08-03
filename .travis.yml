@@ -11,8 +11,8 @@ install:
   - pip install -r requirements.txt
   - pip install .
 script:
+  - travis-sphinx build
   - py.test --cov DashPykpi --cov-report xml --cov-report term
-  #- travis-sphinx build
 after_success:
+  - travis-sphinx deploy
   - codecov
-  #- travis-sphinx deploy
