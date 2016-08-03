@@ -12,6 +12,7 @@ from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.plotting import figure
 from bokeh.embed import components
 
+
 class KpiStats(object):
     """This class uses github3.py to gather key statistics from specified repos
 
@@ -221,17 +222,56 @@ class GraphKPIs(object):
 
         if os.path.exists('tinydb_for_KPI.json'):
             self.db = TinyDB('tinydb_for_KPI.json')
-            self.df = pd.Dataframe(self.db.all())
+            self.df = pd.DataFrame(self.db.all())
         else:
             raise IOError('DB file not present')
 
     def __str__(self):
         print("Class for graphing the output of KPIStats held in a DB.")
 
-    def xy_scatter(self, x, y, ptitle="My plot", give_script_div=False):
+    def auto_title(self, x, y):
+        """Plot title creator
+
+        Automatically generate a title from two strings. The strings
+        can include underscores (as they are column names from a DB), these
+        are removed.
+
+        :param x,y: string e.g. 'fork_count', 'stargazers', 'num_contributors'
+        'total_commits'
+        :return: string Title for plots
         """
-        example of use: xy_scatter(df=, x='stargazers', y='fork_count')
+        x = x.split('_')
+        y = y.split('_')
+        return ' '.join(x + ['vs.'] + y).title()
+
+    def xy_scatter(self, x, y, ptitle=None, give_script_div=False):
+        """ Create an x y scatterplot using Bokeh to insert into a webpage or
+        a Jupyter notebook.
+
+        :param x,y: string 'fork_count', 'stargazers', 'num_contributors'
+        'total_commits'
+        :return: Bokeh object or script and div
+
+        :Example:
+        Assuming a tinydb_for_KPI.json file exists):
+
+        1. Creating html for Django:
+        grobj = GraphKPIs()
+        script, div = grobj.xy_scatter(df=, x='stargazers', y='total_commits',
+        give_script_div=True)
+
+        Then include the script and the div within the Django html template.
+
+        2. Returning a bokeh plot object which can be displayed in a notebook.
+
+        from bokeh.plotting import figure, show, output_notebook
+        output_notebook()
+        grobj = GraphKPIs()
+        p = grobj.xy_scatter(x='stargazers', y='total_commits')
+        show(p)
         """
+        if not ptitle:
+            ptitle = self.auto_title(x=x, y=y)
         df = self.df
         colormap = {
             "low": "#8400FF",
@@ -276,7 +316,8 @@ class GraphKPIs(object):
         p.xaxis.axis_label = x
         p.yaxis.axis_label = y
         p.circle(x, y, source=source, color="color_by_commits")
-        show(p)
         if give_script_div:
             script, div = components(p)
             return script, div
+        else:
+            return(p)
