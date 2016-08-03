@@ -241,9 +241,13 @@ class GraphKPIs(object):
         a Jupyter notebook. Valid x y inputs are 'fork_count', 'stargazers',
         'num_contributors' or 'total_commits'.
 
-        :param x: string
-        :param y: string
-        :return: Bokeh object or script and div
+        - **parameters**, **types**, and **return**::
+
+            :param x: fork_count, stargazers, num_contributors or total_commits
+            :param y: fork_count, stargazers, num_contributors or total_commits
+            :type x: string
+            :type y: string
+            :return: Bokeh object or script and div string items
         """
         if not ptitle:
             ptitle = self.auto_title(x=x, y=y)
