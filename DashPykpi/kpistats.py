@@ -14,20 +14,34 @@ from bokeh.embed import components
 
 
 class KpiStats(object):
-    """This class uses github3.py to gather key statistics from specified repos
+    """This class gathers key statistics from github repos into a TinyDB
 
-    Ensure the class can log in to an authorized github account (if not only
+    The class uses uses github3.py to create an authenticated Github session.
+    Ensure instances can log into an authorized account (if not only
     public repo stats can be retrieved). Two methods can be used to log in.
     Firstly using a github api token: The program will look for this in a file
     called 'secret_key' in the local folder. If this is not found the software
     will default to asking for a username and password. The class should be
     instansiated with a list of github repo url strings.
 
-    - **paramaters**, **types** and **return**::
+    :param urls: list of url strings ['https://github.com/<user>/<repo>',]
 
-        :param urls: Github repo urls
-        :type urls: List
-        :return: KpiStats object
+    :returns: KpiStats() object
+
+    :Example:
+
+    The follwing use case shows how to feed a list of urls to KpiStats
+    and then read the TinyDB object produced (by default) into pandas::
+
+        from DashPykpi.kpistats import KpiStats, GitURLs, GraphKPIs
+
+        url_fetch = GitURLs()
+        urls = url_fetch.urls
+        test = KpiStats(urls=urls)
+        test.work(status=True)
+
+        db = TinyDB('tinydb_for_KPI.json')
+        df = pd.DataFrame(db.all())
     """
     def __init__(self, urls):
         if os.path.isfile('secret_key'):
@@ -48,17 +62,17 @@ class KpiStats(object):
         self.db = TinyDB('tinydb_for_KPI.json')  # create new or open existing
 
     def __str__(self):
-        print("KPI stats back-end")
+        print("A KPI back-end to extract data from Github.")
 
     def get_repo_object_from_url(self, url):
-        """
-        function:: get_repo_object_from_url(self, url)
+        """Get a repository object for a given github url
 
-        Retrieves a github3.py.Repository() object from a url string in an
+        Retrieves a github3.py.Repository() object from a url string under an
         authenticated session.
 
-        :param url: url string in format 'https://github.com/<user>/<repo>'
-        :rtype: Authenticated github3.py.Repository() object as self.repo()
+        :param url: a string of format 'https://github.com/<user>/<repo>'
+
+        :returns: github3.py.Repository() object as self.repo()
         """
         demo = 'https://github.com/<user>/<repo>'
         er1 = "Error: url should be a string in format of "
@@ -70,13 +84,20 @@ class KpiStats(object):
         return
 
     def get_repo_stats(self, debug=False):
-        """
-        function:: KpiStats.get_repo_stats(self)
+        """Identify the statistics of an individual repo
 
-        Uses self.repo() to identify key statistics from a repository.
+        Examines self.repo() to identify key statistics from a repository.
 
-        :param: self
+        :param: self.repo()
         :rtype: A dictionary object as self.stats
+
+        :Example:
+
+        >>> from DashPykpi.kpistats import KpiStats
+        >>> test = KpiStats(urls=["https://github.com/UCL-RITS/RSD-Dashboard"])
+        >>> tx.get_repo_object_from_url(url=tx.urls[0])
+        >>> tx.get_repo_stats()
+        >>> tx.stats # print a dictionary of retrieved stats
         """
         if debug:
             print('\nExamining stats of {0}'.format(self.repo))
