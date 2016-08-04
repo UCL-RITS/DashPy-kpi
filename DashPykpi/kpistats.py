@@ -31,17 +31,15 @@ class KpiStats(object):
     :Example:
 
     The follwing use case shows how to feed a list of urls to KpiStats
-    and then read the TinyDB object produced (by default) into pandas::
+    and then read the TinyDB object produced (by default) into pandas.
 
-        from DashPykpi.kpistats import KpiStats, GitURLs, GraphKPIs
-
-        url_fetch = GitURLs()
-        urls = url_fetch.urls
-        test = KpiStats(urls=urls)
-        test.work(status=True)
-
-        db = TinyDB('tinydb_for_KPI.json')
-        df = pd.DataFrame(db.all())
+    >>> from DashPykpi.kpistats import KpiStats, GitURLs, GraphKPIs
+    >>> url_fetch = GitURLs()
+    >>> urls = url_fetch.urls
+    >>> test = KpiStats(urls=urls)
+    >>> test.work(status=True)
+    >>> db = TinyDB('tinydb_for_KPI.json')
+    >>> df = pd.DataFrame(db.all())
     """
     def __init__(self, urls):
         if os.path.isfile('secret_key'):
@@ -95,9 +93,9 @@ class KpiStats(object):
 
         >>> from DashPykpi.kpistats import KpiStats
         >>> test = KpiStats(urls=["https://github.com/UCL-RITS/RSD-Dashboard"])
-        >>> tx.get_repo_object_from_url(url=tx.urls[0])
-        >>> tx.get_repo_stats()
-        >>> tx.stats # print a dictionary of retrieved stats
+        >>> test.get_repo_object_from_url(url=test.urls[0])
+        >>> test.get_repo_stats()
+        >>> test.stats # print a dictionary of retrieved stats
         """
         if debug:
             print('\nExamining stats of {0}'.format(self.repo))
@@ -119,8 +117,7 @@ class KpiStats(object):
         return
 
     def add_db_row(self):
-        """
-        function:: KpiStats.add_db_row(self)
+        """KpiStats.add_db_row(self)
 
         Checks if there is a database and entry already present, if there isn't
         it adds a row to a database. If there is one already, it checks to see
@@ -148,8 +145,7 @@ class KpiStats(object):
         return
 
     def clean_state(self):
-        """
-        function:: KpiStats.clean_state(self)
+        """Cleans the stats and repo objects from the class between updates
 
         Clean temporary data in the class before attempting to get a new repo
         object, specfically setting self.repo and self.stats to None.
@@ -198,8 +194,9 @@ class GitURLs(object):
 
     :Example:
 
-    url_list = git_urls()
-    url_list.urls[0:3]
+    >>> from DashPykpi import GitURLs
+    >>> url_list = GitURLs()
+    >>> url_list.urls[0:3]
     ['https://github.com/benlaken/Comment_BadruddinAslam2014.git',
     'https://github.com/benlaken/Composite_methods_LC13.git',
     'https://github.com/benlaken/ECCO.git']
@@ -262,13 +259,23 @@ class GraphKPIs(object):
         a Jupyter notebook. Valid x y inputs are 'fork_count', 'stargazers',
         'num_contributors' or 'total_commits'.
 
-        - **parameters**, **types**, and **return**::
+        :param x: fork_count, stargazers, num_contributors or total_commits
+        :param y: fork_count, stargazers, num_contributors or total_commits
+        :type x: string
+        :type y: string
+        :return: Bokeh object or script and div string items
 
-            :param x: fork_count, stargazers, num_contributors or total_commits
-            :param y: fork_count, stargazers, num_contributors or total_commits
-            :type x: string
-            :type y: string
-            :return: Bokeh object or script and div string items
+        :Example:
+
+        Assuming a database object created by KpiStats() exists and you are
+        wish to create the divs and script to insert into a HTML page.
+
+        >>> from DashPykpi.kpistats import GraphKPIs
+        >>> from bokeh.plotting import figure, show, output_notebook
+        >>> output_notebook()
+        >>> grobj = GraphKPIs()
+        >>> script, div = grobj.xy_scatter(x='stargazers', y='fork_count',
+        give_script_div=True)
         """
         if not ptitle:
             ptitle = self.auto_title(x=x, y=y)
