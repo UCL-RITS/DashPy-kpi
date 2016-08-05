@@ -14,14 +14,14 @@ from bokeh.embed import components
 
 
 class KpiStats(object):
-    """**This class gathers key statistics from github repos into a TinyDB**
+    """**Gathers repo statistics from a list of github urls into a TinyDB**
 
     The class uses github3.py to create an authenticated Github session.
     Session is authenticaed either by:
 
     #. Setting up a `github-token
        <https://help.github.com/articles/creating-an-access-token-for-command-line-use/>`_
-       and copying the key into a local file called 'secret_key'.
+       and copying the key into a local file in the cwd called 'secret_key'.
     #. If no 'secret_key' file is detected, the user is prompted to
        enter a username and password.
     #. A github-token can be set as an environment variable
@@ -171,11 +171,19 @@ class KpiStats(object):
         function:: KpiStats.work(self, status=False, debug=False,
         verbose=False, add_to_db=True)
 
-        Main routine that handels passing single url strings to a function to
-        get the repo object, and then examine statistics for each repo. It then
-        writes that data to a TinyDB file. Optionally, reporting on the stats,
-        progress, and execution of the called functions can be provided by
-        setting the status, debug and verbose flags.
+        Main routine that handels passing single url strings to
+        self.get_repo_object() to populate self.repo, and then calls
+        self.get_repo_stats() to put statistics for each repo in a dictionary
+        in self.stats. It then calls self.add_db_row() to write the  dic data
+        to a TinyDB file, and cleans the repo and stats objects from memory.
+
+        Optionally, it also reports on the stats, progress, and execution of
+        the called functions can be provided by via a status, debug and
+        verbose flags.
+
+        :Example:
+
+        See DashPykpi.kpistats.KpiStats()
         """
         for i, url in enumerate(self.urls):
             if status:
