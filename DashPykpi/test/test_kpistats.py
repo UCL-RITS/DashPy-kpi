@@ -76,9 +76,9 @@ def test_error_if_no_db():
     if os.path.isfile('tinydb_for_KPI.json'):
         db_fname = 'tinydb_for_KPI.json'
         tmp_fname = 'tmp_rename_for_test'
-        os.rename(src=db_fname, dst=tmp_fname)
+        os.rename(db_fname, tmp_fname)
         with raises(IOError):
             gobj = GraphKPIs()
-        os.rename(src=tmp_fname, dst=db_fname)
+        os.rename(tmp_fname, db_fname)
     else:
         print("No tinydb file present: unable to test GraphKPIs error raising")
