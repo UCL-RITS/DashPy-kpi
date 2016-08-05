@@ -14,10 +14,19 @@ from bokeh.embed import components
 
 
 class KpiStats(object):
-    """This class gathers key statistics from github repos into a TinyDB
+    """**This class gathers key statistics from github repos into a TinyDB**
 
-    The class uses uses github3.py to create an authenticated Github session.
-    Ensure instances can log into an authorized account (if not only
+    The class uses github3.py to create an authenticated Github session.
+    Session is authenticaed either by:
+
+    #. Setting up a `github-token
+       <https://help.github.com/articles/creating-an-access-token-for-command-line-use/>`_
+       and copying the key into a local file called 'secret_key'.
+    #. If no 'secret_key' file is detected, the user is prompted to
+       enter a username and password.
+    #. A github-token can be set as an environment variable
+       'GHUB_API_TOKEN' (used this on Travis).
+
     public repo stats can be retrieved). Two methods can be used to log in.
     Firstly using a github api token: The program will look for this in a file
     called 'secret_key' in the local folder. If this is not found the software
@@ -221,8 +230,8 @@ class GitURLs(object):
 class GraphKPIs(object):
     """Graph key statistics from specified repos.
 
-    How to embed bokeh plots into Django: example at
-    http://bokeh.pydata.org/en/latest/docs/user_guide/embed.html
+    How to embed bokeh plots into Django (`see example
+    <http://bokeh.pydata.org/en/latest/docs/user_guide/embed.html>`_).
     Essentially, insert the script and div returned into an html template and
     the div will be replaced by the plot objet. This assumes BokehJS has been
     loaded, either inline or via CDN. (See the link above to copy CDN lines.)
@@ -255,27 +264,37 @@ class GraphKPIs(object):
         return ' '.join(x + ['vs.'] + y).title()
 
     def xy_scatter(self, x, y, ptitle=None, give_script_div=False):
-        """ Create an x y scatterplot using Bokeh to insert into a webpage or
-        a Jupyter notebook. Valid x y inputs are 'fork_count', 'stargazers',
+        """ Create an x y scatterplot coloured by total_commits
+
+        Using Bokeh to insert into a webpage or a Jupyter notebook an x y
+        scatter from the TinyDB. Valid inputs are column name strings for
+        the numeric data in the DB, including: 'fork_count', 'stargazers',
         'num_contributors' or 'total_commits'.
 
-        :param x: fork_count, stargazers, num_contributors or total_commits
-        :param y: fork_count, stargazers, num_contributors or total_commits
+        :param x: e.g. 'fork_count', 'stargazers', 'num_contributors' or 'total_commits'
+        :param y: e.g. 'fork_count', 'stargazers', 'num_contributors' or 'total_commits'
         :type x: string
         :type y: string
         :return: Bokeh object or script and div string items
 
         :Example:
 
-        Assuming a database object created by KpiStats() exists and you are
+        1. Assume a database object created by KpiStats() exists and you
         wish to create the divs and script to insert into a HTML page.
 
         >>> from DashPykpi.kpistats import GraphKPIs
-        >>> from bokeh.plotting import figure, show, output_notebook
-        >>> output_notebook()
         >>> grobj = GraphKPIs()
         >>> script, div = grobj.xy_scatter(x='stargazers', y='fork_count',
         give_script_div=True)
+
+        2. Assume a database object created by KpiStats() exists and you
+        wish to plot a test figure in a Jupyter notebook.
+
+        >>> from DashPykpi.kpistats import GraphKPIs
+        >>> from bokeh.plotting import figure, show, output_notebook
+        >>> grobj = GraphKPIs()
+        >>> p = grobj.xy_scatter(x='stargazers', y='fork_count')
+        >>> show(p)
         """
         if not ptitle:
             ptitle = self.auto_title(x=x, y=y)
