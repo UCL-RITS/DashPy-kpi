@@ -4,6 +4,7 @@ import os
 import sys
 from pytest import raises
 
+
 def test_public_repo_access():
     if os.path.isfile('tinydb_for_KPI.json'):
         os.remove('tinydb_for_KPI.json')
