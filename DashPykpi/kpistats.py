@@ -370,7 +370,7 @@ class GraphKPIs(object):
                     ("Num. contributors", "@num_contributors"),
                 ]
             )
-        tools = "pan, resize, wheel_zoom, reset"
+        tools = "pan, resize, wheel_zoom, reset, box_select, save"
         p = figure(title=ptitle, tools=[tools, hover])
         p.xaxis.axis_label = x
         p.yaxis.axis_label = y
