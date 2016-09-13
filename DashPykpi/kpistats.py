@@ -45,6 +45,10 @@ class KpiStats(object):
     >>> from DashPykpi.kpistats import KpiStats, GitURLs, GraphKPIs
     >>> url_fetch = GitURLs()
     >>> urls = url_fetch.urls
+    # If looking through all UCL associated repos need to remove the following
+    # lines:
+    # urls.remove('https://github.com/UCL/ucl')
+    # urls.remove('https://github.com/UCL-RITS/ucl-rits')
     >>> test = KpiStats(urls=urls)
     >>> test.work(status=True)
     >>> db = TinyDB('tinydb_for_KPI.json')
