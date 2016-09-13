@@ -328,7 +328,10 @@ class GraphKPIs(object):
         """
         if not ptitle:
             ptitle = self.auto_title(x=x, y=y)
-        df = self.df
+
+        tmpdf = self.df[self.df['total_commits'] > 0]
+        tmpdf = tmpdf[tmpdf['num_contributors'] < 80]
+        df = tmpdf
         colormap = {
             "low": "#8400FF",
             "mid": "#FF00FF",
