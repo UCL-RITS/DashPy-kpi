@@ -111,11 +111,25 @@ class KpiStats(object):
         >>> test.stats # print a dictionary of retrieved stats
         """
         if debug:
-            print('\nExamining stats of {0}'.format(self.repo))
+            print('\nExamining repo {0}'.format(self.repo))
         contribs = [(str(contrib.author), contrib.total)
                     for contrib in self.repo.iter_contributor_statistics()]
         total = sum([user_num[1] for user_num in contribs])
         branch_count = len([branch for branch in self.repo.iter_branches()])
+        l = [commit for commit in self.repo.iter_commit_activity()]
+        q1 = 0
+        q2 = 0
+        q3 = 0
+        q4 = 0
+        for i, week in enumerate(l):
+            if i < 13:
+                q1 += week['total']
+            if i >= 13 and i <= 25:
+                q2 += week['total']
+            if i > 26 and i <= 39:
+                q3 += week['total']
+            if i > 39:
+                q4 += week['total']
         self.stats = {
             'stargazers': self.repo.stargazers,
             'fork_count': self.repo.fork_count,
@@ -126,6 +140,10 @@ class KpiStats(object):
             'repo_name': self.repo.name,
             'branches': branch_count,
             'language': self.repo.language,
+            "Q1": q1,
+            "Q2": q2,
+            'Q3': q3,
+            "Q4": q4,
             }
         return
 
