@@ -8,7 +8,9 @@ import getpass
 import json
 import requests
 from tinydb import TinyDB, Query
+from bokeh.charts import Area, defaults
 from bokeh.models import HoverTool, ColumnDataSource
+from bokeh.charts import Area, defaults
 from bokeh.plotting import figure
 from bokeh.embed import components
 
@@ -116,20 +118,8 @@ class KpiStats(object):
                     for contrib in self.repo.iter_contributor_statistics()]
         total = sum([user_num[1] for user_num in contribs])
         branch_count = len([branch for branch in self.repo.iter_branches()])
-        l = [commit for commit in self.repo.iter_commit_activity()]
-        q1 = 0
-        q2 = 0
-        q3 = 0
-        q4 = 0
-        for i, week in enumerate(l):
-            if i < 13:
-                q1 += week['total']
-            if i >= 13 and i <= 25:
-                q2 += week['total']
-            if i > 26 and i <= 39:
-                q3 += week['total']
-            if i > 39:
-                q4 += week['total']
+        commits_over_time = [commit for commit in self.repo.iter_commit_activity()]
+        weekly_commits = [week['total'] for week in commits_over_time]
         self.stats = {
             'stargazers': self.repo.stargazers,
             'fork_count': self.repo.fork_count,
@@ -140,10 +130,7 @@ class KpiStats(object):
             'repo_name': self.repo.name,
             'branches': branch_count,
             'language': self.repo.language,
-            "Q1": q1,
-            "Q2": q2,
-            'Q3': q3,
-            "Q4": q4,
+            "weekly_commits": weekly_commits,
             }
         return
 
@@ -380,3 +367,61 @@ class GraphKPIs(object):
             return script, div
         else:
             return(p)
+
+    def weekly_activity(self, per_repo=False, width=800, height=400,
+                        give_script_div=False, verbose=False):
+        """Create a stacked area plot covering the past 52 weeks of acvitity.
+
+        Plot in the notebook (assuming a TinyDB file exists).
+
+        :Example:
+        >>>from bokeh.charts import show, output_notebook
+        >>>from DashPykpi.kpistats import GraphKPIs
+        >>>output_notebook()
+        >>>bk = GraphKPIs()
+        >>>show(bk.weekly_activity())
+        >>>#Or, a version with all repos individually and feedback
+        >>>#show(bk.weekly_activity(per_repo=True, verbose=True))
+        """
+        df = self.df
+        defaults.width = width
+        defaults.height = height
+        if per_repo:
+            running = 0
+            num_repos = 0
+            tmp_hold = {}
+            for n, weekly in enumerate(df['weekly_commits']):
+                if sum(weekly) > 1:
+                    tmp_hold[df['repo_name'][n]] = weekly
+                    running += sum(weekly)
+                    num_repos += 1
+            if verbose:
+                print("{0:3,} commits, in {1} active repos (out of {2} total repos), during past 52 weeks".format(
+                        running, num_repos, len(df)))
+            area = Area(tmp_hold, title="Commits to all repos", legend=None,
+                        stack=True, xlabel='weeks since present ',
+                        ylabel='number of commits')
+
+            if give_script_div:
+                # Iincase you want to add the graphics to a HTML template file
+                script, div = components(area)
+                return script, div
+            else:
+                return(area)
+        if not per_repo:
+            tmp = []
+            for n, weekly in enumerate(df['weekly_commits']):
+                if sum(weekly) > 1:
+                    tmp.append(weekly)
+            tmp = np.array(tmp)
+            tmp = tmp.sum(axis=0)
+            all_weekly_commits = {"All repos": tmp}
+            area = Area(all_weekly_commits, title="Commits to repos",
+                        legend=None, stack=True, xlabel='weeks since present ',
+                        ylabel='number of commits')
+            if give_script_div:
+                # Incase you want to add the graphics to an HTML template
+                script, div = components(area)
+                return script, div
+            else:
+                return(area)
