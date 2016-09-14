@@ -400,13 +400,7 @@ class GraphKPIs(object):
                         width = bin
                         tmp = np.array(tmp)
                         tmp = tmp[:(tmp.size // width) * width].reshape(-1, width).mean(axis=1)
-                        # Bad hacky solution to keeping a clear time label on x-axis
-                        # Should keeps constant weeks despite binning
-                        test = []
-                        for item in tmp:
-                            test.append([item] * width)
-                        tmp = np.array(test).flatten()
-                        xlab = "weeks since now"
+                        xlab = "months since now"
                     else:
                         xlab = 'weeks since now'
                     tmp_hold[df['repo_name'][n]] = tmp
@@ -436,13 +430,7 @@ class GraphKPIs(object):
             if bin:
                 width = bin
                 tmp = tmp[:(tmp.size // width) * width].reshape(-1, width).mean(axis=1)
-                # Bad hacky solution to keeping a clear time label on x-axis
-                # Should keeps constant weeks despite binning
-                test = []
-                for item in tmp:
-                    test.append([item] * width)
-                tmp = np.array(test).flatten()
-                xlab = "weeks since now"
+                xlab = "months since now"
             else:
                 xlab = "weeks since now"
             all_weekly_commits = {"All repos": tmp}
