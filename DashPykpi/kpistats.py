@@ -368,11 +368,13 @@ class GraphKPIs(object):
         else:
             return(p)
 
-    def weekly_activity(self, per_repo=False, width=800, height=400,
+    def weekly_activity(self, bin=None, per_repo=False, width=800, height=400,
                         give_script_div=False, verbose=False):
         """Create a stacked area plot covering the past 52 weeks of acvitity.
 
         Plot in the notebook (assuming a TinyDB file exists).
+
+        bin = Number of weekly bins (if none then the resolution is weekly)
 
         :Example:
         >>>from bokeh.charts import show, output_notebook
@@ -392,15 +394,24 @@ class GraphKPIs(object):
             tmp_hold = {}
             for n, weekly in enumerate(df['weekly_commits']):
                 if sum(weekly) > 1:
-                    tmp_hold[df['repo_name'][n]] = weekly
+                    tmp = weekly
+                    # If binning is required...
+                    if bin:
+                        width = bin
+                        tmp = np.array(tmp)
+                        tmp = tmp[:(tmp.size // width) * width].reshape(-1, width).sum(axis=1)
+                        xlab = "{0} week bins since present".format(width)
+                    else:
+                        xlab = 'weeks since present '
+                    tmp_hold[df['repo_name'][n]] = tmp
                     running += sum(weekly)
                     num_repos += 1
             if verbose:
                 print("{0:3,} commits, in {1} active repos (out of {2} total repos), during past 52 weeks".format(
                         running, num_repos, len(df)))
             area = Area(tmp_hold, title="Commits to all repos", legend=None,
-                        stack=True, xlabel='weeks since present ',
-                        ylabel='number of commits')
+                        stack=True, xlabel=xlab,
+                        ylabel='Master repo commits/week')
 
             if give_script_div:
                 # Iincase you want to add the graphics to a HTML template file
@@ -415,10 +426,17 @@ class GraphKPIs(object):
                     tmp.append(weekly)
             tmp = np.array(tmp)
             tmp = tmp.sum(axis=0)
+            # If binning is required
+            if bin:
+                width = bin
+                tmp = tmp[:(tmp.size // width) * width].reshape(-1, width).sum(axis=1)
+                xlab = "{0} week bins since present".format(width)
+            else:
+                xlab = "weeks since present"
             all_weekly_commits = {"All repos": tmp}
             area = Area(all_weekly_commits, title="Commits to repos",
-                        legend=None, stack=True, xlabel='weeks since present ',
-                        ylabel='number of commits')
+                        legend=None, stack=True, xlabel=xlab,
+                        ylabel='Master repo commits/week')
             if give_script_div:
                 # Incase you want to add the graphics to an HTML template
                 script, div = components(area)
