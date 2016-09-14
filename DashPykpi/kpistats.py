@@ -399,10 +399,16 @@ class GraphKPIs(object):
                     if bin:
                         width = bin
                         tmp = np.array(tmp)
-                        tmp = tmp[:(tmp.size // width) * width].reshape(-1, width).sum(axis=1)
-                        xlab = "{0} week bins since present".format(width)
+                        tmp = tmp[:(tmp.size // width) * width].reshape(-1, width).mean(axis=1)
+                        # Bad hacky solution to keeping a clear time label on x-axis
+                        # Should keeps constant weeks despite binning
+                        test = []
+                        for item in tmp:
+                            test.append([item] * width)
+                        tmp = np.array(test).flatten()
+                        xlab = "weeks since now"
                     else:
-                        xlab = 'weeks since present '
+                        xlab = 'weeks since now'
                     tmp_hold[df['repo_name'][n]] = tmp
                     running += sum(weekly)
                     num_repos += 1
@@ -429,10 +435,16 @@ class GraphKPIs(object):
             # If binning is required
             if bin:
                 width = bin
-                tmp = tmp[:(tmp.size // width) * width].reshape(-1, width).sum(axis=1)
-                xlab = "{0} week bins since present".format(width)
+                tmp = tmp[:(tmp.size // width) * width].reshape(-1, width).mean(axis=1)
+                # Bad hacky solution to keeping a clear time label on x-axis
+                # Should keeps constant weeks despite binning
+                test = []
+                for item in tmp:
+                    test.append([item] * width)
+                tmp = np.array(test).flatten()
+                xlab = "weeks since now"
             else:
-                xlab = "weeks since present"
+                xlab = "weeks since now"
             all_weekly_commits = {"All repos": tmp}
             area = Area(all_weekly_commits, title="Commits to repos",
                         legend=None, stack=True, xlabel=xlab,
