@@ -371,19 +371,18 @@ class GraphKPIs(object):
     def weekly_activity(self, bin=None, per_repo=False, width=800, height=400,
                         give_script_div=False, verbose=False):
         """Create a stacked area plot covering the past 52 weeks of acvitity.
-
         Plot in the notebook (assuming a TinyDB file exists).
-
         bin = Number of weekly bins (if none then the resolution is weekly)
 
         :Example:
-        >>>from bokeh.charts import show, output_notebook
-        >>>from DashPykpi.kpistats import GraphKPIs
-        >>>output_notebook()
-        >>>bk = GraphKPIs()
-        >>>show(bk.weekly_activity())
-        >>>#Or, a version with all repos individually and feedback
-        >>>#show(bk.weekly_activity(per_repo=True, verbose=True))
+
+        >>> from bokeh.charts import show, output_notebook
+        >>> from DashPykpi.kpistats import GraphKPIs
+        >>> output_notebook()
+        >>> bk = GraphKPIs()
+        >>> show(bk.weekly_activity())
+        >>> #Or, a version with all repos individually and feedback
+        >>> show(bk.weekly_activity(per_repo=True, verbose=True))
         """
         df = self.df
         defaults.width = width
