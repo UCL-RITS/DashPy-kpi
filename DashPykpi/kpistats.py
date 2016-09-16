@@ -47,8 +47,8 @@ class KpiStats(object):
     >>> from DashPykpi.kpistats import KpiStats, GitURLs, GraphKPIs
     >>> url_fetch = GitURLs()
     >>> urls = url_fetch.urls
-    # If looking through all UCL associated repos need to remove the following
-    # lines:
+    # If looking through all UCL associated repos need to remove the
+    # following lines:
     # urls.remove('https://github.com/UCL/ucl')
     # urls.remove('https://github.com/UCL-RITS/ucl-rits')
     >>> test = KpiStats(urls=urls)
@@ -107,7 +107,8 @@ class KpiStats(object):
         :Example:
 
         >>> from DashPykpi.kpistats import KpiStats
-        >>> test = KpiStats(urls=["https://github.com/UCL-RITS/RSD-Dashboard"])
+        >>> urls = ["https://github.com/UCL-RITS/RSD-Dashboard"]
+        >>> test = KpiStats(urls=urls)
         >>> test.get_repo_object_from_url(url=test.urls[0])
         >>> test.get_repo_stats()
         >>> test.stats # print a dictionary of retrieved stats
@@ -118,7 +119,8 @@ class KpiStats(object):
                     for contrib in self.repo.iter_contributor_statistics()]
         total = sum([user_num[1] for user_num in contribs])
         branch_count = len([branch for branch in self.repo.iter_branches()])
-        commits_over_time = [commit for commit in self.repo.iter_commit_activity()]
+        commits_over_time = [commit for commit in
+                             self.repo.iter_commit_activity()]
         weekly_commits = [week['total'] for week in commits_over_time]
         self.stats = {
             'stargazers': self.repo.stargazers,
@@ -288,8 +290,10 @@ class GraphKPIs(object):
         the numeric data in the DB, including: 'fork_count', 'stargazers',
         'num_contributors' or 'total_commits'.
 
-        :param x: e.g. 'fork_count', 'stargazers', 'num_contributors' or 'total_commits'
-        :param y: e.g. 'fork_count', 'stargazers', 'num_contributors' or 'total_commits'
+        :param x: e.g. 'fork_count', 'stargazers', 'num_contributors' or
+                        'total_commits'
+        :param y: e.g. 'fork_count', 'stargazers', 'num_contributors' or
+                        'total_commits'
         :type x: string
         :type y: string
         :return: Bokeh object or script and div string items
@@ -398,7 +402,8 @@ class GraphKPIs(object):
                     if bin:
                         width = bin
                         tmp = np.array(tmp)
-                        tmp = tmp[:(tmp.size // width) * width].reshape(-1, width).mean(axis=1)
+                        tmp = tmp[:(tmp.size // width) *
+                                  width].reshape(-1, width).mean(axis=1)
                         xlab = "months since now"
                     else:
                         xlab = 'weeks since now'
@@ -406,7 +411,8 @@ class GraphKPIs(object):
                     running += sum(weekly)
                     num_repos += 1
             if verbose:
-                print("{0:3,} commits, in {1} active repos (out of {2} total repos), during past 52 weeks".format(
+                print("{0:3,} commits, in {1} active repos (out of {2} total"
+                      " repos), during past 52 weeks".format(
                         running, num_repos, len(df)))
             area = Area(tmp_hold, title="Commits to all repos", legend=None,
                         stack=True, xlabel=xlab,
@@ -428,7 +434,8 @@ class GraphKPIs(object):
             # If binning is required
             if bin:
                 width = bin
-                tmp = tmp[:(tmp.size // width) * width].reshape(-1, width).mean(axis=1)
+                tmp = tmp[:(tmp.size // width) *
+                          width].reshape(-1, width).mean(axis=1)
                 xlab = "months since now"
             else:
                 xlab = "weeks since now"
