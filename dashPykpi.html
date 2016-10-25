@@ -1,0 +1,410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>DashPyKPI package &mdash; DashPyKPI 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="DashPyKPI 0.1 documentation" href="index.html" />
+    <link rel="up" title="DashPykpi" href="modules.html" />
+    <link rel="prev" title="Introduction" href="intro.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="dashpykpi-package">
+<h1>DashPyKPI package<a class="headerlink" href="#dashpykpi-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-DashPykpi.kpistats">
+<span id="dashpykpi-kpistats-module"></span><h2>dashpykpi.KpiStats module<a class="headerlink" href="#module-DashPykpi.kpistats" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="DashPykpi.kpistats.GitURLs">
+<em class="property">class </em><code class="descclassname">DashPykpi.kpistats.</code><code class="descname">GitURLs</code><a class="reference internal" href="_modules/DashPykpi/kpistats.html#GitURLs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DashPykpi.kpistats.GitURLs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Get all repo urls associated with a github account.</p>
+<p>Return a list of url strings as self.urls, useful during testing. In
+deployment this list will likely come directly from the Dashboard database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">DashPykpi</span> <span class="k">import</span> <span class="n">GitURLs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url_list</span> <span class="o">=</span> <span class="n">GitURLs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url_list</span><span class="o">.</span><span class="n">urls</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">[&#39;https://github.com/benlaken/Comment_BadruddinAslam2014.git&#39;,</span>
+<span class="go">&#39;https://github.com/benlaken/Composite_methods_LC13.git&#39;,</span>
+<span class="go">&#39;https://github.com/benlaken/ECCO.git&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="DashPykpi.kpistats.GraphKPIs">
+<em class="property">class </em><code class="descclassname">DashPykpi.kpistats.</code><code class="descname">GraphKPIs</code><a class="reference internal" href="_modules/DashPykpi/kpistats.html#GraphKPIs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DashPykpi.kpistats.GraphKPIs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Graph key statistics from specified repos.</p>
+<p>How to embed bokeh plots into Django (<a class="reference external" href="http://bokeh.pydata.org/en/latest/docs/user_guide/embed.html">see example</a>).
+Essentially, insert the script and div returned into an html template and
+the div will be replaced by the plot objet. This assumes BokehJS has been
+loaded, either inline or via CDN. (See the link above to copy CDN lines.)</p>
+<dl class="method">
+<dt id="DashPykpi.kpistats.GraphKPIs.auto_title">
+<code class="descname">auto_title</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DashPykpi/kpistats.html#GraphKPIs.auto_title"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DashPykpi.kpistats.GraphKPIs.auto_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot title creator</p>
+<p>Automatically generate a title from two strings. The strings
+can include underscores (as they are column names from a DB), these
+are removed. Possible values for x and y are &#8216;fork_count&#8217;, &#8216;stargazers&#8217;
+, &#8216;num_contributors&#8217; or &#8216;total_commits&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> &#8211; string</li>
+<li><strong>y</strong> &#8211; string</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">string Title for plots</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DashPykpi.kpistats.GraphKPIs.weekly_activity">
+<code class="descname">weekly_activity</code><span class="sig-paren">(</span><em>bin=None</em>, <em>per_repo=False</em>, <em>width=800</em>, <em>height=400</em>, <em>give_script_div=False</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DashPykpi/kpistats.html#GraphKPIs.weekly_activity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DashPykpi.kpistats.GraphKPIs.weekly_activity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a stacked area plot covering the past 52 weeks of acvitity.
+Plot in the notebook (assuming a TinyDB file exists).
+bin = Number of weekly bins (if none then the resolution is weekly)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">bokeh.charts</span> <span class="k">import</span> <span class="n">show</span><span class="p">,</span> <span class="n">output_notebook</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">DashPykpi.kpistats</span> <span class="k">import</span> <span class="n">GraphKPIs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output_notebook</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bk</span> <span class="o">=</span> <span class="n">GraphKPIs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">show</span><span class="p">(</span><span class="n">bk</span><span class="o">.</span><span class="n">weekly_activity</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#Or, a version with all repos individually and feedback</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">show</span><span class="p">(</span><span class="n">bk</span><span class="o">.</span><span class="n">weekly_activity</span><span class="p">(</span><span class="n">per_repo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="DashPykpi.kpistats.GraphKPIs.xy_scatter">
+<code class="descname">xy_scatter</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>ptitle=None</em>, <em>give_script_div=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DashPykpi/kpistats.html#GraphKPIs.xy_scatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DashPykpi.kpistats.GraphKPIs.xy_scatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an x y scatterplot coloured by total_commits</p>
+<p>Using Bokeh to insert into a webpage or a Jupyter notebook an x y
+scatter from the TinyDB. Valid inputs are column name strings for
+the numeric data in the DB, including: &#8216;fork_count&#8217;, &#8216;stargazers&#8217;,
+&#8216;num_contributors&#8217; or &#8216;total_commits&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>string</em>) &#8211; e.g. &#8216;fork_count&#8217;, &#8216;stargazers&#8217;, &#8216;num_contributors&#8217; or &#8216;total_commits&#8217;</li>
+<li><strong>y</strong> (<em>string</em>) &#8211; e.g. &#8216;fork_count&#8217;, &#8216;stargazers&#8217;, &#8216;num_contributors&#8217; or &#8216;total_commits&#8217;</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Bokeh object or script and div string items</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>1. Assume a database object created by KpiStats() exists and you
+wish to create the divs and script to insert into a HTML page.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">DashPykpi.kpistats</span> <span class="k">import</span> <span class="n">GraphKPIs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grobj</span> <span class="o">=</span> <span class="n">GraphKPIs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">script</span><span class="p">,</span> <span class="n">div</span> <span class="o">=</span> <span class="n">grobj</span><span class="o">.</span><span class="n">xy_scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;stargazers&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;fork_count&#39;</span><span class="p">,</span>
+<span class="go">give_script_div=True)</span>
+</pre></div>
+</div>
+<p>2. Assume a database object created by KpiStats() exists and you
+wish to plot a test figure in a Jupyter notebook.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">DashPykpi.kpistats</span> <span class="k">import</span> <span class="n">GraphKPIs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">bokeh.plotting</span> <span class="k">import</span> <span class="n">figure</span><span class="p">,</span> <span class="n">show</span><span class="p">,</span> <span class="n">output_notebook</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grobj</span> <span class="o">=</span> <span class="n">GraphKPIs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">grobj</span><span class="o">.</span><span class="n">xy_scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;stargazers&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;fork_count&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">show</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="DashPykpi.kpistats.KpiStats">
+<em class="property">class </em><code class="descclassname">DashPykpi.kpistats.</code><code class="descname">KpiStats</code><span class="sig-paren">(</span><em>urls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DashPykpi/kpistats.html#KpiStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DashPykpi.kpistats.KpiStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p><strong>Gathers repo statistics from a list of github urls into a TinyDB</strong></p>
+<p>The class uses github3.py to create an authenticated Github session.
+Session is authenticaed either by:</p>
+<ol class="arabic simple">
+<li>Setting up a <a class="reference external" href="https://help.github.com/articles/creating-an-access-token-for-command-line-use/">github-token</a>
+and copying the key into a local file in the cwd called &#8216;secret_key&#8217;.</li>
+<li>If no &#8216;secret_key&#8217; file is detected, the user is prompted to
+enter a username and password.</li>
+<li>A github-token can be set as an environment variable
+&#8216;GHUB_API_TOKEN&#8217; (used this on Travis).</li>
+</ol>
+<p>public repo stats can be retrieved). Two methods can be used to log in.
+Firstly using a github api token: The program will look for this in a file
+called &#8216;secret_key&#8217; in the local folder. If this is not found the software
+will default to asking for a username and password. The class should be
+instansiated with a list of github repo url strings.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>urls</strong> &#8211; list of url strings [&#8216;<a class="reference external" href="https://github.com">https://github.com</a>/&lt;user&gt;/&lt;repo&gt;&#8217;,]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">KpiStats() object</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>The follwing use case shows how to feed a list of urls to KpiStats
+and then read the TinyDB object produced (by default) into pandas.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">DashPykpi.kpistats</span> <span class="k">import</span> <span class="n">KpiStats</span><span class="p">,</span> <span class="n">GitURLs</span><span class="p">,</span> <span class="n">GraphKPIs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url_fetch</span> <span class="o">=</span> <span class="n">GitURLs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">urls</span> <span class="o">=</span> <span class="n">url_fetch</span><span class="o">.</span><span class="n">urls</span>
+<span class="go"># If looking through all UCL associated repos need to remove the following</span>
+<span class="go"># lines:</span>
+<span class="go"># urls.remove(&#39;https://github.com/UCL/ucl&#39;)</span>
+<span class="go"># urls.remove(&#39;https://github.com/UCL-RITS/ucl-rits&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span> <span class="o">=</span> <span class="n">KpiStats</span><span class="p">(</span><span class="n">urls</span><span class="o">=</span><span class="n">urls</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="o">.</span><span class="n">work</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">TinyDB</span><span class="p">(</span><span class="s1">&#39;tinydb_for_KPI.json&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="DashPykpi.kpistats.KpiStats.add_db_row">
+<code class="descname">add_db_row</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DashPykpi/kpistats.html#KpiStats.add_db_row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DashPykpi.kpistats.KpiStats.add_db_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if there is a database and entry already present, if there isn&#8217;t
+it adds a row to a database. If there is one already, it checks to see
+if the newly retrieved dictionary has updated info. If so, it removes
+the old row, and adds in the new one. If there is an error, and there
+is more than one row per repo it throws an assert error.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">self</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">updates database connected to self.db</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DashPykpi.kpistats.KpiStats.clean_state">
+<code class="descname">clean_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/DashPykpi/kpistats.html#KpiStats.clean_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DashPykpi.kpistats.KpiStats.clean_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cleans the stats and repo objects from the class between updates</p>
+<p>Clean temporary data in the class before attempting to get a new repo
+object, specfically setting self.repo and self.stats to None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">self</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Rtype self.repo:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Rtype self.stats:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DashPykpi.kpistats.KpiStats.get_repo_object_from_url">
+<code class="descname">get_repo_object_from_url</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DashPykpi/kpistats.html#KpiStats.get_repo_object_from_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DashPykpi.kpistats.KpiStats.get_repo_object_from_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a repository object for a given github url</p>
+<p>Retrieves a github3.py.Repository() object from a url string under an
+authenticated session.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>url</strong> &#8211; a string of format &#8216;<a class="reference external" href="https://github.com">https://github.com</a>/&lt;user&gt;/&lt;repo&gt;&#8217;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">github3.py.Repository() object as self.repo()</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DashPykpi.kpistats.KpiStats.get_repo_stats">
+<code class="descname">get_repo_stats</code><span class="sig-paren">(</span><em>debug=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DashPykpi/kpistats.html#KpiStats.get_repo_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DashPykpi.kpistats.KpiStats.get_repo_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identify the statistics of an individual repo</p>
+<p>Examines self.repo() to identify key statistics from a repository.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">self.repo()</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A dictionary object as self.stats</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">DashPykpi.kpistats</span> <span class="k">import</span> <span class="n">KpiStats</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span> <span class="o">=</span> <span class="n">KpiStats</span><span class="p">(</span><span class="n">urls</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;https://github.com/UCL-RITS/RSD-Dashboard&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="o">.</span><span class="n">get_repo_object_from_url</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">urls</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="o">.</span><span class="n">get_repo_stats</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="o">.</span><span class="n">stats</span> <span class="c1"># print a dictionary of retrieved stats</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="DashPykpi.kpistats.KpiStats.work">
+<code class="descname">work</code><span class="sig-paren">(</span><em>status=False</em>, <em>debug=False</em>, <em>verbose=False</em>, <em>add_to_db=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DashPykpi/kpistats.html#KpiStats.work"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DashPykpi.kpistats.KpiStats.work" title="Permalink to this definition">¶</a></dt>
+<dd><p>function:: KpiStats.work(self, status=False, debug=False,
+verbose=False, add_to_db=True)</p>
+<p>Main routine that handels passing single url strings to
+self.get_repo_object() to populate self.repo, and then calls
+self.get_repo_stats() to put statistics for each repo in a dictionary
+in self.stats. It then calls self.add_db_row() to write the  dic data
+to a TinyDB file, and cleans the repo and stats objects from memory.</p>
+<p>Optionally, it also reports on the stats, progress, and execution of
+the called functions can be provided by via a status, debug and
+verbose flags.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>See DashPykpi.kpistats.KpiStats()</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-DashPykpi">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-DashPykpi" title="Permalink to this headline">¶</a></h2>
+<p>Backend for Dashboard KPI</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">DashPyKPI package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-DashPykpi.kpistats">dashpykpi.KpiStats module</a></li>
+<li><a class="reference internal" href="#module-DashPykpi">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">DashPykpi</a><ul>
+      <li>Previous: <a href="intro.html" title="previous chapter">Introduction</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/dashPykpi.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Benjamin A. Laken.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/dashPykpi.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
